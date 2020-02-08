@@ -16,7 +16,7 @@ export const useFetch = (func , url)=>{
         useEffect(()=>{
             fetchInitialData()
           },[])
-          
+
           return loading
         }
         
