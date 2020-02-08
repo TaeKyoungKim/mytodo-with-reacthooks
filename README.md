@@ -1,7 +1,7 @@
-https://github.com/TaeKyoungKim/mytodo-with-reacthooks/issues/1#issue-562050366
+
 ## ⚽️ React 와 React Hooks를 이용한 mytodo app 만들기
 
-<img src="https://github.com/TaeKyoungKim/mytodo-with-reacthooks/issues/1#issue-562050366" width="90%"></img>
+<img src="https://user-images.githubusercontent.com/25717861/74089303-2363dc00-4ae3-11ea-9086-979122930439.png" width="90%"></img>
 `npx create-react-app`
 
 App.js
