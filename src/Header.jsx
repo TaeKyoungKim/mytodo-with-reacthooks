@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import './Header.css'
-import {TodoContext} from './App'
+import {TodoContext} from './TodoStore'
 
 
 // export const Header = ({todos}) => {
