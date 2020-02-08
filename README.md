@@ -76,9 +76,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 ## ⚽️ React 와 React Hooks를 이용한 mytodo app 만들기
 
-![image](https://user-images.githubusercontent.com/25717861/74089213-4cd03800-4ae2-11ea-90d3-18b1e4e9bce6.png)
-mytodo app 생성
-
+<img src="https://user-images.githubusercontent.com/25717861/74089213-4cd03800-4ae2-11ea-90d3-18b1e4e9bce6.png)" width="90%"></img>
 `npx create-react-app`
 
 App.js
