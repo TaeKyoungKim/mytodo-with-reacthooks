@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React ,{useState, useEffect }from 'react';
+import {List} from './List'
 
-function App() {
+const App = ()=>{
+  const [todos, setTodo] = useState(['Js Study']);
+  const [newTodo , setNewTodo] = useState()
+
+  const ChangeInputData = (e)=>{
+    setNewTodo(e.target.value);
+
+  }
+
+  const addTodo = (e)=>{
+    e.preventDefault()
+    setTodo([...todos, newTodo]);
+  }
+
+  useEffect(()=>{
+    console.log("새로운 내용이 입력 되었습니다" ,todos)
+  },[todos])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <h1>ToDo Application </h1>
+    <form>
+      <input type="text" className="" onChange={ChangeInputData}></input>
+      <button className="" onClick={addTodo}>할일추가</button>
+      <List todos={todos}/>
+    </form>
     </div>
   );
 }
