@@ -1,11 +1,15 @@
 import React ,{useState, useEffect }from 'react';
 import {List} from './List'
+import {useFetch} from './UseFetch'
 
+
+  
 const App = ()=>{
   const [todos, setTodo] = useState([]);
-  const [newTodo , setNewTodo] = useState()
-  const [loading , setLoading] = useState(false)
+  const [newTodo , setNewTodo] = useState();
 
+  const loading = useFetch(setTodo, `http://localhost:8080/todo`)
+  
   const ChangeInputData = (e)=>{
     setNewTodo(e.target.value);
 
@@ -13,25 +17,15 @@ const App = ()=>{
 
   const addTodo = (e)=>{
     e.preventDefault()
-    setTodo([...todos, newTodo]);
+    setTodo([...todos, {'title':newTodo, 'id':todos.length+1}]);
   }
 
-  const fetchInitialData = async ()=>{
-    setLoading(true)
-    var response = await fetch(`http://localhost:8080/todo`)
-    var res = await response.json()
-    await console.log(res)
-    await setTodo(res.data)  
-    setLoading(false)
-
-  }
+  
   useEffect(()=>{
     console.log("새로운 내용이 입력 되었습니다" ,todos)
   },[todos])
   
-  useEffect(()=>{
-    fetchInitialData()
-  },[])
+  
 
   return (
     <div className="App">
