@@ -2,7 +2,10 @@ import React ,{useState, useEffect }from 'react';
 import {List} from './List'
 import {useFetch} from './UseFetch'
 import {Header} from './Header'
+import {Form} from './Form'
 
+
+export const TodoContext = React.createContext();
   
 const App = ()=>{
   const [todos, setTodo] = useState([]);
@@ -17,7 +20,7 @@ const App = ()=>{
 
   const addTodo = (e)=>{
     e.preventDefault()
-    setTodo([...todos, {'title':newTodo, 'id':todos.length+1}]);
+    setTodo([...todos, {'title':newTodo, 'id':todos.length, 'status':'todo'}]);
   }
 
   const changeTodoStatus = (id)=>{
@@ -41,14 +44,11 @@ const App = ()=>{
   
 
   return (
-    <div className="App">
-    <Header todos={todos} />
-    <form>
-      <input type="text" className="" onChange={ChangeInputData}></input>
-      <button className="" onClick={addTodo}>할일추가</button>
-      <List todos={todos} loading={loading} changeTodoStatus={changeTodoStatus}/>
-    </form>
-    </div>
+    <TodoContext.Provider value={{todos, addTodo,ChangeInputData,loading,changeTodoStatus }}>
+    <Header />
+    <Form />
+    <List/>
+    </TodoContext.Provider>
   );
 }
 
