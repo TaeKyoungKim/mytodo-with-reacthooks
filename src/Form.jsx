@@ -1,12 +1,18 @@
-import React, {useContext} from 'react'
+import React, {useContext, useRef} from 'react'
 import {TodoContext} from './TodoStore'
 
 export const Form = () => {
-    const {addTodo, ChangeInputData} = useContext(TodoContext)
+    const inputRef = useRef(null)
+    const {dispatch} = useContext(TodoContext);
+    const  onButtonClick = (e)=>{
+        e.preventDefault()
+        dispatch({type:"ADD_TODO" , payload:inputRef.current.value})
+
+    }
     return (
         <form action="">
-        <input type="text" className="" onChange={ChangeInputData}></input>
-        <button className="" onClick={addTodo}>할일추가</button>
+        <input type="text" className="" ref={inputRef}></input>
+        <button className="" onClick={onButtonClick}>할일추가</button>
       </form>
     )
 }

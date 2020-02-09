@@ -1,4 +1,4 @@
-import React ,{useState, useEffect }from 'react';
+import React ,{useEffect ,useReducer }from 'react';
 import {List} from './List'
 import {useFetch} from './UseFetch'
 import {Header} from './Header'
@@ -6,21 +6,37 @@ import {Form} from './Form'
 
 
 export const TodoContext = React.createContext();
+
+const todoRedcer =(todos, action)=>{
+    switch (action.type) {
+        case "ADD_TODO":
+            
+            // return;
+            return [...todos, {'title':action.payload, 'id':todos.length+1, 'status':'todo'}];
+        case "SET_INIT_DATA":
+        
+            return action.payload;
+
+        default:
+            throw new Error();
+    }
+}
   
 const TodoStore = ()=>{
-  const [todos, setTodo] = useState([]);
-  const [newTodo , setNewTodo] = useState();
+//   const [todos, setTodo] = useState([]);
+  const [todos, dispatch] = useReducer(todoRedcer , [])
+//   const [newTodo , setNewTodo] = useState();
 
-  const loading = useFetch(setTodo, `http://localhost:8080/todo`)
+const setInitData = (initData)=>{
+    dispatch({type:'SET_INIT_DATA' , payload:initData})
+}
+  const loading = useFetch(setInitData, `http://localhost:8080/todo`)
   
-  const ChangeInputData = (e)=>{
-    setNewTodo(e.target.value);
+  
 
-  }
-
-  const addTodo = (e)=>{
-    e.preventDefault()
-    setTodo([...todos, {'title':newTodo, 'id':todos.length+1, 'status':'todo'}]);
+  const addTodo = (newTodo)=>{
+  
+    // setTodo();
   }
 
   const changeTodoStatus = (id)=>{
@@ -33,7 +49,7 @@ const TodoStore = ()=>{
 
       return todo
     })
-    setTodo(updateTodos)
+    // setTodo(updateTodos)
     console.log(updateTodos)
   }
   
@@ -44,7 +60,7 @@ const TodoStore = ()=>{
   
 
   return (
-    <TodoContext.Provider value={{todos, addTodo,ChangeInputData,loading,changeTodoStatus }}>
+    <TodoContext.Provider value={{todos, dispatch,loading,changeTodoStatus }}>
     <Header />
     <Form />
     <List/>
