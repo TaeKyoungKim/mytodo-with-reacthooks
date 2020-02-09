@@ -819,6 +819,174 @@ Reducer Hook에서 현재 state와 같은 값을 반환하는 경우 React는 �
 
 실행을 회피하기 전에 React에서 특정 컴포넌트를 다시 렌더링하는 것이 여전히 필요할 수도 있다는 것에 주의하세요. React가 불필요하게 트리에 그 이상으로 「더 깊게」 까지는 가지 않을 것이므로 크게 신경 쓰지 않으셔도 됩니다. 만약 렌더링 시에 고비용의 계산을 하고 있다면 useMemo를 사용하여 그것들을 최적화할 수 있습니다.
 
+### useReducer를 활용한 state관리
+
+useState 를 대체 하는 것으로서 기존에 useState를 사용했던 부분을 삭제하고 useReducer로 바꾼다.
+
+
+
+```javascript
+import React ,{useEffect ,useReducer }from 'react';
+import {useFetch} from './UseFetch'
+import {todoRedcer} from './reducers'
+
+
+export const TodoContext = React.createContext();
+  
+const TodoStore = (props)=>{
+//   const [todos, setTodo] = useState([]);
+  const [todos, dispatch] = useReducer(todoRedcer , [])
+//   const [newTodo , setNewTodo] = useState();
+
+const setInitData = (initData)=>{
+    dispatch({type:'SET_INIT_DATA' , payload:initData})
+}
+const loading = useFetch(setInitData, `http://localhost:8080/todo`)
+
+useEffect(()=>{
+console.log("새로운 내용이 입력 되었습니다" ,todos)
+},[todos])
+  
+  
+
+  return (
+    <TodoContext.Provider value={{todos, dispatch,loading}}>
+    {props.children}
+    </TodoContext.Provider>
+  );
+}
+
+export default TodoStore;
+```
+
+
+
+
+
+```
+const setInitData = (initData)=>{
+    dispatch({type:'SET_INIT_DATA' , payload:initData})
+}
+```
+
+setInitData을 받아 useFetch (setInitData) 인자로 넣는다 
+
+그러면 useFetch 메소드가 실행하면서 setInitData 함수의 콜백함수으로 dispatch가 실행하면서 
+
+`dispatch({type:'SET_INIT_DATA' , payload:initData})`  부분에서 type과 initData에 res.data를 받아와서 payload의 value 값으로 받는다.
+
+
+
+```javascript
+#List.jsx
+import React,{useContext} from 'react'
+import {Item} from './Item'
+import {TodoContext} from './TodoStore'
+
+
+export const List = () => {
+    const {todos ,loading} =useContext(TodoContext)
+   //  console.log("List todos:"+JSON.stringify(todos))
+    let todoLists = <h1>TodoList is now Loading....</h1>
+    if(!loading) todoLists = todos.map(todo=><Item key={todo.id}  todos={todo}/>)
+
+    return (
+        <div>
+           <ul>
+              {todoLists}
+           </ul>
+        </div>
+    )
+}
+```
+
+
+
+와 같이 수정한다. 
+
+
+
+```javascript
+import React,{useContext}  from 'react'
+
+import './Item.css'
+
+import {TodoContext} from './TodoStore'
+
+
+
+export const Item = ({todos}) => {
+
+   const {dispatch} =useContext(TodoContext)
+
+    const toggleItem = (e)=>{
+
+      const id = e.target.dataset.id
+
+       dispatch({type:"CHANGE_TODO_STATUS" , payload:id})
+
+  }
+
+   const itemClassName = todos.status === 'done' ? 'done':''
+
+  return (
+
+       <li data-id={todos.id} onClick={toggleItem} className={itemClassName}>{todos.title}</li>
+
+   )
+
+}
+```
+
+
+
+useReducer의 dispatch를 전달한다.
+
+
+
+마찬가지로  Form.jsx도 다음과 같이 수정한다.
+
+```javascript
+#Form.jsx
+import React, {useContext, useRef} from 'react'
+
+import {TodoContext} from './TodoStore'
+
+
+
+export const Form = () => {
+
+   const inputRef = useRef(null)
+
+   const { dispatch} = useContext(TodoContext);
+
+   const  onButtonClick = (e)=>{
+
+      e.preventDefault()
+
+       dispatch({type:"ADD_TODO" , payload:inputRef.current.value})
+
+    }
+
+    return (
+
+        <form action="/" method="POST">
+
+      <input type="text" className="" ref={inputRef}></input>
+
+       <button className="" onClick={onButtonClick}>할일추가</button>
+
+      </form>
+
+   )
+
+}
+```
+
+
+
+useReducer를 활용하여 useState를 대체함과 동시에 스태이트 관리를 어느 정도 편리하게 할 수 있다.
+
 
 
 
