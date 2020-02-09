@@ -16,7 +16,16 @@ const todoRedcer =(todos, action)=>{
         case "SET_INIT_DATA":
         
             return action.payload;
+        case "CHANGE_TODO_STATUS":
 
+            return todos.map(todo=>{
+                if(todo.id === action.payload){
+                    if(todo.status === 'done') todo.status ="todo"
+                    else todo.status= "done"
+                }
+          
+                return todo
+              })
         default:
             throw new Error();
     }
@@ -39,19 +48,19 @@ const setInitData = (initData)=>{
     // setTodo();
   }
 
-  const changeTodoStatus = (id)=>{
-    // debugger;
-    const updateTodos= todos.map(todo=>{
-      if(todo.id === +id){
-          if(todo.status === 'done') todo.status ="todo"
-          else todo.status= "done"
-      }
+//   const changeTodoStatus = (id)=>{
+//     // debugger;
+//     const updateTodos= todos.map(todo=>{
+//       if(todo.id === +id){
+//           if(todo.status === 'done') todo.status ="todo"
+//           else todo.status= "done"
+//       }
 
-      return todo
-    })
-    // setTodo(updateTodos)
-    console.log(updateTodos)
-  }
+//       return todo
+//     })
+//     // setTodo(updateTodos)
+//     console.log(updateTodos)
+//   }
   
   useEffect(()=>{
     console.log("새로운 내용이 입력 되었습니다" ,todos)
@@ -60,7 +69,7 @@ const setInitData = (initData)=>{
   
 
   return (
-    <TodoContext.Provider value={{todos, dispatch,loading,changeTodoStatus }}>
+    <TodoContext.Provider value={{todos, dispatch,loading}}>
     <Header />
     <Form />
     <List/>
